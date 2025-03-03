@@ -7,12 +7,17 @@ dotenv.config();
 let certificatePath = process.env.CERTIFICATE_PATH || "";
 const certificateBase64 = process.env.CERTIFICATE_BASE64;
 
-// Se estivermos no Render, criamos um arquivo temporário com o certificado Base64
 if (certificateBase64) {
-    const tempPath = path.join(__dirname, "certificado_temp.p12");
-    fs.writeFileSync(tempPath, Buffer.from(certificateBase64, "base64"));
-    certificatePath = tempPath;
-    console.log("🔐 Certificado temporário criado com sucesso.");
+    try {
+        const tempPath = path.join("/tmp", "certificado_temp.p12"); // Diretório correto para Render
+        fs.writeFileSync(tempPath, Buffer.from(certificateBase64, "base64"));
+        certificatePath = tempPath;
+        console.log("🔐 Certificado salvo com sucesso em:", tempPath);
+    } catch (err) {
+        console.error("❌ Erro ao criar o certificado:", err);
+    }
+} else {
+    console.warn("⚠️ Variável CERTIFICATE_BASE64 não encontrada!");
 }
 
 const credentials = {
