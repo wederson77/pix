@@ -44,7 +44,7 @@ app.post("/cobranca", async (req, res) => {
         const { cpf, nome, valor } = req.body;
         console.log(`📌 Criando cobrança para: ${nome}, CPF: ${cpf}, Valor: R$${valor}`);
 
-        const resultado = await criarCobrancaImediata(cpf, nome, valor, caminhoCertificado);
+        const resultado = await criarCobrancaImediata(cpf, nome, valor);
         res.json({ sucesso: true, dados: resultado });
     } catch (error) {
         const mensagemErro = error instanceof Error ? error.message : "Erro desconhecido";
